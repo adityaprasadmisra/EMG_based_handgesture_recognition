@@ -12,10 +12,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report, ConfusionMatrixDisplay
 from sklearn.pipeline import Pipeline
 
-# ═══════════════════════════════════════════════════════════════
 #  SECTION 1 — LOAD AND CLEAN DATA
-# ═══════════════════════════════════════════════════════════════
-
 print("═" * 50)
 print("  SECTION 1 — LOAD AND CLEAN")
 print("═" * 50)
@@ -41,7 +38,7 @@ for person, filename in CSV_FILES.items():
 df = pd.concat(frames, ignore_index=True)
 print(f"\n  Combined total rows : {len(df)}")
 
-# ── CLEAN ──────────────────────────────────────────────────────
+# CLEAN 
 df['emg1'] = pd.to_numeric(df['emg1'], errors='coerce')
 df['emg2'] = pd.to_numeric(df['emg2'], errors='coerce')
 
@@ -61,11 +58,7 @@ print(f"  Rows after cleaning : {len(df)}")
 print(f"\n  Samples per gesture :")
 print(df['gesture'].value_counts().to_string())
 
-
-# ═══════════════════════════════════════════════════════════════
 #  SECTION 2 — SIGNAL PROCESSING  ← NEW LAYER
-# ═══════════════════════════════════════════════════════════════
-
 print("\n" + "═" * 50)
 print("  SECTION 2 — SIGNAL PROCESSING")
 print("═" * 50)
@@ -143,12 +136,7 @@ relax_rms  = np.sqrt(np.mean(df[df['gesture'] == 'relax' ]['emg1'].values ** 2))
 fist_rms   = np.sqrt(np.mean(df[df['gesture'] == 'fist'  ]['emg1'].values ** 2))
 snr_db     = 20 * np.log10(fist_rms / relax_rms)
 print(f"\n  Post-filter SNR (fist vs relax) : {snr_db:.2f} dB")
-
-
-# ═══════════════════════════════════════════════════════════════
 #  SECTION 3 — FEATURE EXTRACTION
-# ═══════════════════════════════════════════════════════════════
-
 print("\n" + "═" * 50)
 print("  SECTION 3 — FEATURE EXTRACTION")
 print("═" * 50)
@@ -191,12 +179,7 @@ y = np.array(y)
 print(f"\n  Feature matrix shape : {X.shape}")
 print(f"\n  Windows per gesture  :")
 print(pd.Series(y).value_counts().to_string())
-
-# ── rest of your sections 3–8 remain exactly the same ─────────
-# ═══════════════════════════════════════════════════════════════
 #  SECTION 3 — PREPARE FOR TRAINING
-# ═══════════════════════════════════════════════════════════════
-
 print("\n" + "═" * 50)
 print("  SECTION 3 — PREPARE FOR TRAINING")
 print("═" * 50)
@@ -221,12 +204,7 @@ X_test  = scaler.transform(X_test)
 
 print(f"\n  Training samples : {len(X_train)}")
 print(f"  Testing samples  : {len(X_test)}")
-
-
-# ═══════════════════════════════════════════════════════════════
 #  SECTION 4 — TRAIN AND COMPARE ALL 3 MODELS
-# ═══════════════════════════════════════════════════════════════
-
 print("\n" + "═" * 50)
 print("  SECTION 4 — TRAIN AND COMPARE MODELS")
 print("═" * 50)
@@ -257,12 +235,7 @@ print("\n  ── ACCURACY SUMMARY ───────────────
 for name, acc in sorted(results.items(), key=lambda x: x[1], reverse=True):
     bar = '█' * int(acc * 20)
     print(f"  {name:15s}  {acc*100:5.1f}%  {bar}")
-
-
-# ═══════════════════════════════════════════════════════════════
 #  SECTION 5 — CONFUSION MATRIX
-# ═══════════════════════════════════════════════════════════════
-
 print("\n" + "═" * 50)
 print("  SECTION 5 — CONFUSION MATRIX")
 print("═" * 50)
@@ -303,11 +276,7 @@ plt.savefig('confusion_matrix_all.png', dpi=150)
 plt.show()
 print("  Saved → confusion_matrix_all.png")
 
-
-# ═══════════════════════════════════════════════════════════════
 #  SECTION 6 — CROSS VALIDATION
-# ═══════════════════════════════════════════════════════════════
-
 print("\n" + "═" * 50)
 print("  SECTION 6 — CROSS VALIDATION (5-fold)")
 print("═" * 50)
@@ -325,11 +294,7 @@ for name, model in models.items():
     print(f"  {'':15s}  Per fold: {[f'{s*100:.1f}%' for s in scores]}")
     print()
 
-
-# ═══════════════════════════════════════════════════════════════
 #  SECTION 7 — FEATURE IMPORTANCE (Random Forest)
-# ═══════════════════════════════════════════════════════════════
-
 print("\n" + "═" * 50)
 print("  SECTION 7 — FEATURE IMPORTANCE")
 print("═" * 50)
@@ -345,7 +310,7 @@ sorted_idx  = np.argsort(importances)[::-1]
 
 print("\n  Feature importance ranking:")
 for rank, idx in enumerate(sorted_idx):
-    bar = '█' * int(importances[idx] * 200)
+    bar = ' ' * int(importances[idx] * 200)
     print(f"  {rank+1:2d}. {feature_names[idx]:12s}  {importances[idx]:.4f}  {bar}")
 
 plt.figure(figsize=(11, 4))
@@ -360,11 +325,7 @@ plt.savefig('feature_importance.png', dpi=150)
 plt.show()
 print("\n  Saved → feature_importance.png")
 
-
-# ═══════════════════════════════════════════════════════════════
 #  SECTION 8 — SAVE BEST MODEL
-# ═══════════════════════════════════════════════════════════════
-
 print("\n" + "═" * 50)
 print("  SECTION 8 — SAVE MODEL FILES")
 print("═" * 50)
