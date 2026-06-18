@@ -1,12 +1,13 @@
 import serial
 import numpy as np
-import pickle
+import pickle  
+#Pickle is a Python module used to save Python objects (such as trained machine learning models) to a file and load them later without recreating or retraining them.
 import time
 
 from collections import Counter
 
 
-# ── LOAD MODEL ───────────────────────────────────────────
+# ── LOAD MODEL 
 model  = pickle.load(open('gesture_model.pkl', 'rb'))
 scaler = pickle.load(open('scaler.pkl',        'rb'))
 le     = pickle.load(open('label_encoder.pkl', 'rb'))
@@ -25,7 +26,7 @@ VOTE_BUFFER = 7
 CONFIDENCE  = 0.70
 
 GESTURE_DISPLAY = {
-    'relax'    : '😶  RELAX',
+    'relax'    : '  RELAX',
     'fist'     : '✊  FIST',
     'flexor'   : '🤙  FLEXOR',
     'extensor' : '🖖  EXTENSOR',
@@ -71,7 +72,7 @@ def predict_from_buffer(data_buffer):
     confidence  = top_count / len(all_predictions)
     return top_gesture, confidence
 
-# ── CONNECT ──────────────────────────────────────────────
+# ── CONNECT 
 print(f"\nConnecting on {PORT}...")
 ser = serial.Serial(PORT, BAUD, timeout=2)
 time.sleep(2)
@@ -85,14 +86,13 @@ while True:
     print("─" * 40)
     input("\n  Press ENTER to START recording your gesture...")
 
-    # ── RECORDING PHASE ──────────────────────────────────
+    # ── RECORDING PHASE 
     print("  🔴 RECORDING — Hold your gesture now...")
     print("  Press ENTER to STOP\n")
 
     data_buffer  = []
     stop_flag    = [False]
 
-    # Non-blocking stop — runs stop detection in a separate thread
     import threading
     def wait_for_stop():
         input()
@@ -130,7 +130,7 @@ while True:
         except Exception:
             continue
 
-    # ── DETECTION PHASE ──────────────────────────────────
+    # ── DETECTION PHASE
     print(f"\n\n  ⏹  STOPPED — {len(data_buffer)} samples recorded")
 
     if len(data_buffer) < WINDOW_SIZE:
