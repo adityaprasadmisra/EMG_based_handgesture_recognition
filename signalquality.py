@@ -91,7 +91,7 @@ print(f"Signal RMS : {signal_rms:.2f}")
 print(f"SNR        : {snr_db:.2f} dB")
 
 # ====================== FILTERING FUNCTIONS ======================
-def bandpass_filter(data, lowcut=20, highcut=450, fs=500, order=4):
+def bandpass_filter(data, lowcut=20, highcut=240, fs=500, order=4):
     nyq = fs / 2
     low = lowcut / nyq
     high = highcut / nyq
